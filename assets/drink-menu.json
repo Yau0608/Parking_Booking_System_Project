@@ -1,0 +1,39 @@
+[
+    {
+        "name": "Bubble Milk Tea",
+        "type": "Classic Drinks",
+        "price": "$30 (S), $35 (M), $40 (L)",
+        "image": "assets/bubble-milktea.png"
+    },
+    {
+        "name": "Iced Latte",
+        "type": "Coffee",
+        "price": "$31 (S), $36 (M), $41 (L)",
+        "image": "assets/iced-latte.jpg"
+    },
+    {
+        "name": "Pineapple Juice",
+        "type": "Fruit Juice",
+        "price": "$32 (S), $37 (M), $42 (L)",
+        "image": "assets/pineapple-juice.jpg"
+    },
+    {
+        "name": "Apple Juice",
+        "type": "Fruit Juice",
+        "price": "$33 (S), $38 (M), $43 (L)",
+        "image": "assets/apple-juice.jpeg"
+    },
+    {
+        "name": "Cappuccino",
+        "type": "Coffee",
+        "price": "$34 (S), $39 (M), $44 (L)",
+        "image": "assets/cappuccino.jpeg"
+    },
+    {
+        "name": "Mango Juice",
+        "type": "Fruit Juice",
+        "price": "$35 (S), $40 (M), $45 (L)",
+        "image": "assets/mango-juice.png"
+    }
+
+]
