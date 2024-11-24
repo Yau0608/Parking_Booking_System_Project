@@ -1,0 +1,86 @@
+Phase 1: Basic Setup and User Authentication
+Initial Setup
+[x] Basic Express server setup (completed)
+[x] Static file serving (completed)
+[x] Database schema design (partially - User model created)
+[x] MongoDB connection setup (completed)
+
+User Registration System
+[x] Create registration form with fields:
+[x] User ID (username field)
+[x] Password
+[x] Nickname
+[x] Email
+[x] Gender
+[x] Birthdate
+
+[ ] Implement validation:
+[ ] Password policy
+[ ] Duplicate user ID check
+[ ] Email format validation
+[ ] Required field validation
+[ ] Add success/failure notifications
+[ ] Create user database model
+Authentication System
+[ ] Implement login functionality:
+[ ] Regular user login
+[ ] Admin login (admin/adminpass)
+[ ] Session management
+[ ] Logout functionality
+[ ] Role-based access control
+[ ] Authentication middleware
+Phase 2: Parking Space Visualization
+SVG Map Creation
+[ ] Design SVG map with 30+ parking spaces
+[ ] Implement color coding:
+[ ] Available spaces
+[ ] Occupied spaces
+[ ] Make spaces interactive/clickable
+[ ] Space numbering system
+Basic Space Management
+[ ] Create space status tracking system
+[ ] Real-time availability updates
+[ ] Space selection functionality
+Phase 3: Event Management
+Admin Event Dashboard
+[ ] Create event management interface
+[ ] Implement event CRUD operations:
+[ ] Create new events
+[ ] Read event details
+[ ] Update event information
+[ ] Delete events
+[ ] Event fields:
+[ ] Date/time
+[ ] Title
+[ ] Venue
+[ ] Description
+[ ] Available spaces
+User Event View
+[ ] Create event listing page
+[ ] Event details display
+[ ] Available ticket counter
+[ ] Event filtering/sorting
+Phase 4: Booking and Payment System
+Booking System
+[ ] Create booking interface
+[ ] Implement space selection
+[ ] Add pricing calculation
+[ ] Booking validation
+[ ] Temporary space hold during booking
+Payment Processing
+[ ] Create payment form
+[ ] Payment details collection
+[ ] Payment confirmation system
+[ ] Electronic ticket generation
+[ ] Order status updates
+Phase 5: Admin Features
+Space Management
+[ ] Admin dashboard
+[ ] Real-time occupancy monitoring
+[ ] Space status management
+[ ] Booking overview
+Reporting and Analytics
+[ ] Occupancy reports
+[ ] Booking statistics
+[ ] Revenue tracking
+[ ] User activity monitoring
