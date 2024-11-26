@@ -24,9 +24,11 @@ export function validateUsername(username) {
 export async function createUser(userData) {
   try {
     // Validate all required fields
-    if (!userData.username || !userData.password || !userData.email || 
-        !userData.nickname || !userData.gender || !userData.birthdate) {
-      throw new Error('All fields are required');
+    const requiredFields = ['username', 'password', 'email', 'nickname', 'gender', 'birthdate'];
+    for (const field of requiredFields) {
+      if (!userData[field]) {
+        throw new Error(`${field} is required`);
+      }
     }
 
     // Validate password

@@ -12,4 +12,4 @@ export const checkAdmin = (req, res, next) => {
     return res.redirect('/login.html');
   }
   next();
-}; 
+};
