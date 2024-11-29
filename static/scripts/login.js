@@ -1,39 +1,80 @@
 $(document).ready(function () {
-  // Regular login button click handler
-  $('#login').click(function () {
-    handleLogin();
+  // Check for remembered username when page loads
+  const rememberedUsername = getCookie('remembered_username');
+  if (rememberedUsername) {
+    $('#username').val(rememberedUsername);
+    $('#rememberMe').prop('checked', true);
+  }
+
+  // Form submission handler
+  $('#loginForm').submit(async function (e) {
+    e.preventDefault();
+
+    const username = $('#username').val().trim();
+    const password = $('#password').val();
+
+    try {
+      const response = await fetch('/api/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, password })
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        window.location.href = '/normal.html';
+      } else {
+        alert(data.message || 'Login failed');
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      alert('An error occurred during login');
+    }
   });
+
+  // Cookie utility functions
+  function setCookie(name, value, days) {
+    const date = new Date();
+    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+    const expires = "expires=" + date.toUTCString();
+    document.cookie = name + "=" + value + ";" + expires + ";path=/";
+  }
+
+  function getCookie(name) {
+    const nameEQ = name + "=";
+    const ca = document.cookie.split(';');
+    for (let i = 0; i < ca.length; i++) {
+      let c = ca[i];
+      while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+      if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+    }
+    return null;
+  }
+
+  function deleteCookie(name) {
+    document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT; path=/';
+  }
 
   // Admin login button click handler
   $('#admin_login').click(function () {
-    window.location.href = '/admin-login.html';
+    window.location.href = '/admin_login.html';
   });
 
-  function handleLogin() {
-    const username = $('#username').val();
-    const password = $('#password').val();
+  // Register button click handler
+  $('#register').click(function () {
+    window.location.href = '/register.html';
+  });
 
-    // Basic validation
-    if (!username || !password) {
-      alert('Please fill in all fields');
-      return;
-    }
-
-    $.ajax({
-      url: 'api/login',
-      method: 'POST',
-      contentType: 'application/json',
-      data: JSON.stringify({ username, password }),
-      success: function (response) {
-        if (response.success) {
-          window.location.href = response.isAdmin ? '/admin.html' : '/normal.html';
-        }
-      },
-      error: function (xhr) {
-        const response = xhr.responseJSON;
-        console.error('Login error:', xhr.status, response);
-        alert(response?.message || 'Login failed. Please try again.');
-      }
-    });
+  // Time display functionality
+  function updateTime() {
+    const current_date = new Date();
+    const currentDateTime = current_date.toLocaleString();
+    document.getElementById('time').innerHTML = currentDateTime;
   }
-});
+
+  updateTime();
+  setInterval(updateTime, 1000);
+}); 

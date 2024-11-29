@@ -3,13 +3,33 @@ $(document).ready(function () {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const usernameRegex = /^[a-zA-Z0-9_]{4,20}$/;
 
-  // Real-time validation feedback
+  // Real-time password confirmation validation
+  $('#confirmPassword').on('input', function () {
+    const password = $('#password').val();
+    const confirmPassword = $(this).val();
+    const isValid = password === confirmPassword;
+
+    $(this).removeClass('is-valid is-invalid').addClass(isValid ? 'is-valid' : 'is-invalid');
+    if (!isValid) {
+      $(this).next('.invalid-feedback').remove();
+      $(this).after('<div class="invalid-feedback">Passwords do not match</div>');
+    }
+  });
+
+  // Update password field to also check confirmation when changed
   $('#password').on('input', function () {
     const isValid = passwordRegex.test($(this).val());
     $(this).removeClass('is-valid is-invalid').addClass(isValid ? 'is-valid' : 'is-invalid');
     if (!isValid) {
       $(this).next('.invalid-feedback').remove();
       $(this).after('<div class="invalid-feedback">Password must be at least 8 characters long and contain uppercase, lowercase, and numbers</div>');
+    }
+
+    // Recheck confirm password field
+    const confirmPassword = $('#confirmPassword');
+    if (confirmPassword.val()) {
+      const confirmIsValid = $(this).val() === confirmPassword.val();
+      confirmPassword.removeClass('is-valid is-invalid').addClass(confirmIsValid ? 'is-valid' : 'is-invalid');
     }
   });
 
@@ -27,60 +47,80 @@ $(document).ready(function () {
     }
   });
 
-  $('#registerForm').on('submit', function (e) {
+  // Add this after your document.ready function
+  function readURL(input) {
+    if (input.files && input.files[0]) {
+      const reader = new FileReader();
+
+      reader.onload = function (e) {
+        $('#profilePreview').attr('src', e.target.result);
+      }
+
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
+
+  $('#profileImage').change(function () {
+    const file = this.files[0];
+    if (file) {
+      // Check file size
+      if (file.size > 5 * 1024 * 1024) {
+        alert('File size must be less than 5MB');
+        this.value = '';
+        return;
+      }
+
+      // Check file type
+      if (!file.type.match(/image.*/)) {
+        alert('Only image files are allowed');
+        this.value = '';
+        return;
+      }
+
+      readURL(this);
+    }
+  });
+
+  // Modify your form submission to include the image
+  $('#registerForm').on('submit', async function (e) {
     e.preventDefault();
 
-    const formData = {
-      username: $('#username').val().trim(),
-      password: $('#password').val(),
-      nickname: $('#nickname').val().trim(),
-      email: $('#email').val().trim(),
-      gender: $('#gender').val(),
-      birthdate: $('#birthdate').val()
-    };
+    const formData = new FormData();
+    formData.append('username', $('#username').val().trim());
+    formData.append('password', $('#password').val());
+    formData.append('nickname', $('#nickname').val().trim());
+    formData.append('email', $('#email').val().trim());
+    formData.append('gender', $('#gender').val());
+    formData.append('birthdate', $('#birthdate').val());
 
-    // Client-side validation
-    if (!usernameRegex.test(formData.username)) {
-      alert('Invalid username format');
-      return;
+    // Append the profile image if one was selected
+    const profileImage = $('#profileImage')[0].files[0];
+    if (profileImage) {
+      formData.append('profileImage', profileImage);
     }
 
-    if (!passwordRegex.test(formData.password)) {
-      alert('Invalid password format');
-      return;
-    }
+    try {
+      const response = await fetch('/api/register', {
+        method: 'POST',
+        body: formData // Note: Don't set Content-Type header when sending FormData
+      });
 
-    if (!emailRegex.test(formData.email)) {
-      alert('Invalid email format');
-      return;
-    }
+      const data = await response.json();
 
-    if (!formData.gender) {
-      alert('Please select a gender');
-      return;
-    }
-
-    if (!formData.birthdate) {
-      alert('Please enter your birthdate');
-      return;
-    }
-
-    $.ajax({
-      url: '/api/register',
-      method: 'POST',
-      contentType: 'application/json',
-      data: JSON.stringify(formData),
-      success: function (response) {
+      if (response.ok) {
         alert('Registration successful!');
         window.location.href = '/login.html';
-      },
-      error: function (xhr) {
-        const error = xhr.responseJSON?.error || 'Registration failed';
-        alert(error);
+      } else {
+        alert(data.error || 'Registration failed');
       }
-    });
+    } catch (error) {
+      console.error('Registration error:', error);
+      alert('An error occurred during registration');
+    }
   });
-  $('#backToLogin').click(function () {
+
+  // Add back to login button functionality
+  $('#backToLogin').on('click', function () {
     window.location.href = '/login.html';
   });
 });

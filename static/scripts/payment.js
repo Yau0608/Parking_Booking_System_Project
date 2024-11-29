@@ -5,6 +5,11 @@ $(document).ready(function() {
         success: function(response) {
             var park_num = response.parkNum;
             $("#park_num").text(park_num);
+            if (park_num == "001" && "002" && "003" && "004" && "005" && "101" && "102" && "103" && "104" && "105" && "201" && "202" && "203" && "204" && "205") {
+                $("#price").text("$50");
+            } else {
+                $("#price").text("$100");
+            }
         },
         error: function() {
             $("#park_num").text("Error loading parking number");

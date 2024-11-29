@@ -31,6 +31,11 @@ setInterval(updateAllParkingSpots, 300);
 
 $(".parking-spot").click(function(event){
     var park_num = $(this).attr("id");
+    if (park_num == "001" || "002" || "003" || "004" || "005" || "101" || "102" || "103" || "104" || "105" || "201" || "202" || "203" || "204" || "205") {
+        $("#price").text("$50");
+    } else {
+        $("#price").text("$100");
+    }
 
     // First, check the current status of the spot
     $.ajax({
