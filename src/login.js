@@ -1,15 +1,15 @@
 import express from 'express';
 import { findUserByUsername } from './models/user.js';
 import { checkAuth, checkAdmin } from './middleware/auth.js';
+import { comparePassword } from './utils/password.js';
 const router = express.Router();
 
 // Basic login route
 router.post('/login', async (req, res) => {
-  console.log('Login route hit:', req.body);
   const { username, password } = req.body;
 
   try {
-    // Check for admin credentials, admin username and password are hardcoded
+    // Admin check remains the same
     if (username === 'admin' && password === 'adminpass') {
       req.session.logged = true;
       req.session.username = username;
@@ -19,10 +19,26 @@ router.post('/login', async (req, res) => {
 
     // Regular user authentication
     const user = await findUserByUsername(username);
-    console.log('Found user:', user);
 
-    if (!user || user.password !== password) {
-      console.log('Login failed: Invalid credentials');
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        message: 'Invalid username or password'
+      });
+    }
+
+    // Add status check here
+    if (user.status === 'suspended') {
+      return res.status(403).json({
+        success: false,
+        message: 'Your account has been suspended. Please contact an administrator.'
+      });
+    }
+
+    // Compare password with stored hash
+    const isValidPassword = await comparePassword(password, user.password);
+
+    if (!isValidPassword) {
       return res.status(401).json({
         success: false,
         message: 'Invalid username or password'

@@ -8,8 +8,16 @@ export const checkAuth = (req, res, next) => {
 };
 
 export const checkAdmin = (req, res, next) => {
+  console.log('Session:', req.session);
   if (!req.session.logged || req.session.role !== 'admin') {
-    return res.redirect('/login.html');
+    console.log('Admin check failed:', {
+      logged: req.session.logged,
+      role: req.session.role
+    });
+    return res.status(401).json({
+      success: false,
+      message: 'Admin authentication required'
+    });
   }
   next();
 };
