@@ -32,8 +32,7 @@ $(document).ready(function () {
   });
 
   $('#viewUsers').click(function () {
-    // TODO: Implement view users functionality
-    alert('View users functionality coming soon');
+    window.location.href = '/admin_users.html';
   });
 
   $('#generateReport').click(function () {
