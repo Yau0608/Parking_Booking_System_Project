@@ -1,5 +1,5 @@
 import { client } from '../dbclient.js';
-
+import { hashPassword, comparePassword } from '../utils/password.js';
 const db = client.db("parkingSystem");
 const users = db.collection("users");
 
@@ -24,9 +24,11 @@ export function validateUsername(username) {
 export async function createUser(userData) {
   try {
     // Validate all required fields
-    if (!userData.username || !userData.password || !userData.email || 
-        !userData.nickname || !userData.gender || !userData.birthdate) {
-      throw new Error('All fields are required');
+    const requiredFields = ['username', 'password', 'email', 'nickname', 'gender', 'birthdate'];
+    for (const field of requiredFields) {
+      if (!userData[field]) {
+        throw new Error(`${field} is required`);
+      }
     }
 
     // Validate password
@@ -50,8 +52,15 @@ export async function createUser(userData) {
       throw new Error('Username already exists');
     }
 
+    const hashedPassword = await hashPassword(userData.password);
+
+    // Add default status to new users
+    userData.status = 'active';
+    userData.createdAt = new Date();
+
     const result = await users.insertOne({
       ...userData,
+      password: hashedPassword, // Store the hashed password
       createdAt: new Date(),
       role: 'user'
     });
@@ -64,4 +73,20 @@ export async function createUser(userData) {
 
 export async function findUserByUsername(username) {
   return users.findOne({ username });
+}
+
+export async function updateUserProfile(username, updates) {
+  const result = await users.updateOne(
+    { username },
+    { $set: updates }
+  );
+  return result;
+}
+
+export async function updateUserPassword(username, hashedPassword) {
+  const result = await users.updateOne(
+    { username },
+    { $set: { password: hashedPassword } }
+  );
+  return result;
 }
