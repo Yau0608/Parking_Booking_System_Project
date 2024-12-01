@@ -125,7 +125,6 @@ app.get('/normal.html', checkAuth, (req, res, next) => {
 app.get('/admin.html', checkAdmin, (req, res, next) => {
   res.sendFile('admin.html', { root: './static' });
 });
-
 app.get('/account.html', checkAuth, (req, res, next) => {
   res.sendFile('account.html', { root: './static' });
 });
@@ -321,6 +320,11 @@ app.post('/api/profile/change-password', checkAuth, async (req, res) => {
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
+});
+
+// Add this with your other protected routes
+app.get('/booking.html', checkAuth, (req, res, next) => {
+  res.sendFile('booking.html', { root: './static' });
 });
 
 const PORT = 8080;

@@ -5,11 +5,12 @@
 
 import express from 'express';
 import { client } from './dbclient.js';
+import { checkAuth } from './middleware/auth.js';
 const route = express.Router();
 
 route.use(express.json());
 
-route.get('/parking-spot/:spotNumber', async (req, res) => {
+route.get('/parking-spot/:spotNumber', checkAuth, async (req, res) => {
     try {
         await client.connect();
         const database = await client.db('parkingSystem');
@@ -26,7 +27,7 @@ route.get('/parking-spot/:spotNumber', async (req, res) => {
     }
 });
 
-route.post('/toggle-spot/:spotNumber', async (req, res) => {
+route.post('/toggle-spot/:spotNumber', checkAuth, async (req, res) => {
     try {
         await client.connect();
         const database = await client.db('parkingSystem');
@@ -55,7 +56,7 @@ route.post('/toggle-spot/:spotNumber', async (req, res) => {
     }
 });
 
-route.post('/select-spot', (req, res) => {
+route.post('/select-spot', checkAuth, (req, res) => {
     const parkNum = req.body.parkNum; // Assuming the park number is sent in the request body
     req.session.parkNum = parkNum;
     res.json({ success: true, message: 'Parking spot selected' });
