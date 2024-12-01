@@ -275,6 +275,33 @@ async function getRelatedBookings(primaryBookingId) {
   }
 }
 
+// Add or modify this function
+async function getCurrentBookings() {
+  try {
+    const currentDate = new Date();
+    currentDate.setHours(0, 0, 0, 0);
+
+    // Get bookings that are not cancelled and are for today or future
+    const currentBookings = await bookings.find({
+      date: { $gte: currentDate },
+      status: { $in: ['pending', 'confirmed', 'paid'] }
+    }).toArray();
+
+    // Map the bookings to ensure ObjectId is properly stringified
+    const mappedBookings = currentBookings.map(booking => ({
+      ...booking,
+      _id: booking._id.toString(),
+      primaryBookingId: booking.primaryBookingId ? booking.primaryBookingId.toString() : null
+    }));
+
+    console.log('Found current bookings:', mappedBookings);
+    return mappedBookings;
+  } catch (error) {
+    console.error('Error in getCurrentBookings:', error);
+    throw error;
+  }
+}
+
 // Export all functions at the end of the file
 export {
   initializeParkingSpaces,
@@ -284,5 +311,6 @@ export {
   getBookingById,
   getRelatedBookings,
   updateBookingStatus,
-  updateParkingSpace
+  updateParkingSpace,
+  getCurrentBookings
 };

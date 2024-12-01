@@ -8,6 +8,57 @@
     crossorigin="anonymous"></script>
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   <script src="scripts/admin.js"></script>
+  <style>
+    .parking-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 10px;
+      max-width: 1000px;
+      margin: 20px auto;
+      position: relative;
+    }
+
+    .parking-spot {
+      aspect-ratio: 1;
+      background-color: #4CAF50;
+      border: 1px solid #333;
+      border-radius: 5px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      transition: all 0.3s ease;
+    }
+
+    .parking-spot.occupied {
+      background-color: #f44336;
+    }
+
+    .parking-spot.pending {
+      background-color: #ff9800;
+    }
+
+    .parking-spot.maintenance {
+      background-color: #9e9e9e;
+    }
+
+    .tooltip-content {
+      text-align: left;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .tooltip.show {
+      opacity: 1;
+    }
+
+    .tooltip-inner {
+      max-width: 300px;
+      background-color: rgba(0, 0, 0, 0.9);
+    }
+  </style>
 </head>
 <title>Admin Dashboard</title>
 
@@ -25,9 +76,14 @@
         <div class="card">
           <div class="card-header">
             <h3>Parking Space Overview</h3>
+            <select class="form-select mt-2" id="adminVenueSelect">
+              <option value="">Select a venue</option>
+              <option value="Ground Floor">G/F</option>
+              <option value="First Floor">1/F</option>
+            </select>
           </div>
           <div class="card-body">
-            <div id="parkingSpaces">
+            <div id="parkingSpaces" class="parking-grid">
               <!-- Parking spots will be generated dynamically -->
             </div>
           </div>
@@ -41,32 +97,17 @@
           </div>
           <div class="card-body">
             <div class="mb-3">
-              <button class="btn btn-primary w-100 mb-2" id="viewBookings">View All Bookings</button>
               <button class="btn btn-success w-100 mb-2" id="manageSpaces">Manage Parking Spaces</button>
               <button class="btn btn-info w-100 mb-2" id="viewUsers">View Users</button>
               <button class="btn btn-warning w-100" id="manageEvents">Manage Events</button>
             </div>
           </div>
         </div>
-
-        <div class="card mt-3">
-          <div class="card-header">
-            <h3>Quick Stats</h3>
-          </div>
-          <div class="card-body">
-            <p>Total Spaces: <span id="totalSpaces">0</span></p>
-            <p>Occupied Spaces: <span id="occupiedSpaces">0</span></p>
-            <p>Available Spaces: <span id="availableSpaces">0</span></p>
-            <p>Today's Bookings: <span id="todayBookings">0</span></p>
-          </div>
-        </div>
       </div>
     </div>
   </main>
 
-  <footer class="text-bg-dark p-3 text-center fixed-bottom">
-    <div id="time"></div>
-  </footer>
+
 </body>
 
 </html>

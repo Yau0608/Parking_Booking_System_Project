@@ -73,14 +73,4 @@ $(document).ready(function () {
   $('#register').click(function () {
     window.location.href = '/register.html';
   });
-
-  // Time display functionality
-  function updateTime() {
-    const current_date = new Date();
-    const currentDateTime = current_date.toLocaleString();
-    document.getElementById('time').innerHTML = currentDateTime;
-  }
-
-  updateTime();
-  setInterval(updateTime, 1000);
 }); 

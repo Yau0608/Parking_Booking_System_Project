@@ -4,10 +4,38 @@ import {
   getParkingStatus,
   createBooking,
   getBookingById,
-  getRelatedBookings
+  getRelatedBookings,
+  getCurrentBookings,
+  updateParkingSpace
 } from '../models/parking.js';
 
 const router = express.Router();
+
+// Move this route to the top, before other booking routes
+router.get('/bookings/current', checkAuth, async (req, res) => {
+  try {
+    const currentBookings = await getCurrentBookings();
+
+    if (!currentBookings) {
+      return res.json({
+        success: true,
+        bookings: []
+      });
+    }
+
+    res.json({
+      success: true,
+      bookings: currentBookings
+    });
+  } catch (error) {
+    console.error('Error in /bookings/current:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error fetching current bookings',
+      error: error.message
+    });
+  }
+});
 
 // Get parking status
 router.get('/parking-status/:venue?', async (req, res) => {
@@ -30,7 +58,6 @@ router.post('/bookings', checkAuth, async (req, res) => {
   try {
     const bookingData = {
       userId: req.session.username,
-      eventId: req.body.eventId,
       spaceNumbers: req.body.spaceNumbers.map(num => parseInt(num)),
       duration: req.body.duration,
       price: parseFloat(req.body.price),

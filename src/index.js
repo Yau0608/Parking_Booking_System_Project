@@ -35,7 +35,11 @@ app.use(
     secret: '21092461d_21106121d_eie4432_final_project',
     resave: false,
     saveUninitialized: false,
-    cookie: { httpOnly: true }
+    cookie: {
+      httpOnly: true,
+      secure: false, // set to true if using HTTPS
+      maxAge: 24 * 60 * 60 * 1000 // 24 hours
+    }
   })
 );
 

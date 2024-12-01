@@ -43,13 +43,5 @@ $(document).ready(function () {
     window.location.href = '/login.html';
   });
 
-  // Time display functionality
-  function updateTime() {
-    const current_date = new Date();
-    const currentDateTime = current_date.toLocaleString();
-    document.getElementById('time').innerHTML = currentDateTime;
-  }
 
-  updateTime();
-  setInterval(updateTime, 1000);
 }); 

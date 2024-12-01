@@ -1,5 +1,6 @@
 $(document).ready(function () {
   let allEvents = [];
+  let searchTimeout;
 
   // Load events on page load
   loadEvents();
@@ -9,6 +10,65 @@ $(document).ready(function () {
   $('#venueFilter').on('change', filterEvents);
   $('#dateFilter').on('change', filterEvents);
   $('#clearFilters').click(clearFilters);
+  $('#eventSearch').on('input', function () {
+    clearTimeout(searchTimeout);
+    const searchTerm = $(this).val();
+
+    // Add console log to debug
+    console.log('Searching for:', searchTerm);
+
+    if (searchTerm.length < 2) {
+      $('#searchSuggestions').hide();
+      return;
+    }
+
+    searchTimeout = setTimeout(() => {
+      // Filter from existing events
+      const suggestions = allEvents
+        .filter(event => {
+          const matchTitle = event.title.toLowerCase().includes(searchTerm.toLowerCase());
+          const matchVenue = event.venue.toLowerCase().includes(searchTerm.toLowerCase());
+          return matchTitle || matchVenue;
+        })
+        .slice(0, 5); // Show top 5 matches
+
+      // Add console log to debug
+      console.log('Found suggestions:', suggestions);
+
+      // Display suggestions
+      if (suggestions.length > 0) {
+        const suggestionHtml = suggestions
+          .map(suggestion => `
+            <div class="suggestion-item p-2" onclick="selectSuggestion('${suggestion.title}')">
+              <i class="bi bi-search me-2"></i>
+              <span class="suggestion-title">${suggestion.title}</span>
+              <small class="text-muted ms-2">${suggestion.venue}</small>
+            </div>
+          `)
+          .join('');
+
+        $('#searchSuggestions')
+          .html(suggestionHtml)
+          .show();
+      } else {
+        $('#searchSuggestions').hide();
+      }
+    }, 300);
+  });
+
+  // Add click handler for suggestions
+  window.selectSuggestion = function (title) {
+    $('#eventSearch').val(title);
+    $('#searchSuggestions').hide();
+    filterEvents();
+  };
+
+  // Hide suggestions when clicking outside
+  $(document).on('click', function (event) {
+    if (!$(event.target).closest('.event-filters').length) {
+      $('#searchSuggestions').hide();
+    }
+  });
 
   // Load events from API
   async function loadEvents() {
