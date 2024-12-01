@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Payment - CarPark Booking System</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <style>
+    .ticket-container {
+      display: none;
+      /* Initially hidden */
+      margin-top: 20px;
+    }
+
+    .e-ticket {
+      border: 2px solid #000;
+      padding: 20px;
+      margin: 20px 0;
+      background-color: #fff;
+    }
+
+    .qr-code {
+      text-align: center;
+      margin: 15px 0;
+    }
+  </style>
+</head>
+
+<body>
+  <header class="text-bg-dark p-3">
+    <div class="container d-flex justify-content-between align-items-center">
+      <div>
+        <button class="btn btn-outline-light me-2" id="backButton">
+          <i class="bi bi-arrow-left"></i> Back
+        </button>
+        <span class="h1 mb-0">Payment Processing</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="container mt-4">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <!-- Booking Details Card -->
+        <div class="card mb-4">
+          <div class="card-header">
+            <h3>Booking Details</h3>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-6">
+                <p><strong>Space Number:</strong> <span id="spaceNumber"></span></p>
+                <p><strong>Duration:</strong> <span id="duration"></span></p>
+              </div>
+              <div class="col-md-6">
+                <p><strong>Date:</strong> <span id="bookingDate"></span></p>
+                <p><strong>Amount:</strong> <span id="amount"></span></p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Payment Form Card -->
+        <div class="card" id="paymentFormCard">
+          <div class="card-header">
+            <h3>Payment Details</h3>
+          </div>
+          <div class="card-body">
+            <form id="paymentForm">
+              <div class="mb-3">
+                <label class="form-label">Card Number:</label>
+                <input type="text" class="form-control" id="cardNumber" required pattern="[0-9]{16}"
+                  placeholder="1234 5678 9012 3456">
+              </div>
+              <div class="row mb-3">
+                <div class="col">
+                  <label class="form-label">Expiry Date:</label>
+                  <input type="text" class="form-control" id="expiryDate" placeholder="MM/YY" required
+                    pattern="[0-9]{2}/[0-9]{2}">
+                </div>
+                <div class="col">
+                  <label class="form-label">CVV:</label>
+                  <input type="text" class="form-control" id="cvv" required pattern="[0-9]{3}" placeholder="123">
+                </div>
+              </div>
+              <div class="d-flex justify-content-between mt-3">
+                <button type="button" class="btn btn-secondary" id="cancelPayment">Cancel Payment</button>
+                <button type="submit" class="btn btn-primary">Complete Payment</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- E-Ticket Container (Initially Hidden) -->
+        <div id="ticketContainer" class="ticket-container">
+          <div class="card">
+            <div class="card-header">
+              <h3>E-Ticket</h3>
+            </div>
+            <div class="card-body" id="ticketContent">
+              <!-- Ticket content will be inserted here -->
+            </div>
+            <div class="card-footer d-flex justify-content-between">
+              <button class="btn btn-secondary" onclick="window.print()">Print Ticket</button>
+              <button class="btn btn-primary" id="returnToHome">Return to Home</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</body>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="scripts/payment.js"></script>
+
+</html>

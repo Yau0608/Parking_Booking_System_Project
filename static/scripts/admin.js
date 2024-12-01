@@ -32,13 +32,17 @@ $(document).ready(function () {
   });
 
   $('#viewUsers').click(function () {
-    // TODO: Implement view users functionality
-    alert('View users functionality coming soon');
+    window.location.href = '/admin_users.html';
   });
 
   $('#generateReport').click(function () {
     // TODO: Implement report generation functionality
     alert('Report generation functionality coming soon');
+  });
+
+  // Update the manageEvents button handler
+  $('#manageEvents').click(function () {
+    window.location.href = '/admin_events.html';
   });
 
   // Time display functionality
