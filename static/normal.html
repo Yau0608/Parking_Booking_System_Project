@@ -7,13 +7,15 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="scripts/normal.js"></script>
+    <script src="scripts/events.js"></script>
     <style>
         .parking-grid {
             display: grid;
-            grid-template-columns: repeat(5, 1fr);
+            grid-template-columns: repeat(6, 1fr);
             gap: 10px;
-            max-width: 800px;
+            max-width: 1000px;
             margin: 20px auto;
+            position: relative;
         }
 
         .parking-spot {
@@ -27,11 +29,62 @@
             justify-content: center;
             color: white;
             font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .parking-spot:hover {
+            background-color: #45a049;
+            transform: scale(1.05);
         }
 
         .parking-spot.occupied {
             background-color: #f44336;
             cursor: not-allowed;
+        }
+
+        .parking-spot.selected {
+            background-color: #2196F3;
+            transform: scale(1.05);
+            box-shadow: 0 0 10px rgba(33, 150, 243, 0.5);
+        }
+
+        #selectionInfo {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            background-color: rgba(33, 150, 243, 0.9);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-weight: bold;
+            z-index: 100;
+            display: none;
+        }
+
+        .selected-spaces-info {
+            max-width: 1000px;
+            margin: 20px auto;
+        }
+
+        #selectedSpacesList {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .selected-space-tag {
+            background-color: #2196F3;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .remove-space {
+            cursor: pointer;
+            font-weight: bold;
         }
     </style>
 </head>
@@ -62,29 +115,71 @@
     </nav>
 
     <main class="container mt-4">
-        <div class="parking-grid">
-            <!-- Parking spots will be generated dynamically -->
+        <div class="container mt-4">
+            <div class="row mb-4">
+                <div class="col-md-6 offset-md-3">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Select Venue</h3>
+                        </div>
+                        <div class="card-body">
+                            <select class="form-select" id="venueSelect">
+                                <option value="">Select a venue</option>
+                                <option value="Ground Floor">Ground Floor</option>
+                                <option value="First Floor">First Floor</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="parking-grid">
+                <!-- Parking spots will be generated dynamically -->
+            </div>
+        </div>
+
+        <div class="selected-spaces-info card mt-3 mb-3 d-none">
+            <div class="card-header">
+                <h4>Selected Spaces</h4>
+            </div>
+            <div class="card-body">
+                <div id="selectedSpacesList" class="mb-3"></div>
+                <div class="d-flex justify-content-between">
+                    <span>Total Spaces: <span id="totalSelectedSpaces">0</span></span>
+                    <span>Total Price: $<span id="totalPrice">0</span></span>
+                </div>
+            </div>
         </div>
 
         <div class="booking-form d-none">
-            <h3>Book Parking Spot</h3>
+            <h3>Book Parking Spots</h3>
             <form id="bookingForm">
+                <input type="hidden" id="selectedSpaces" name="selectedSpaces">
                 <div class="mb-3">
                     <label class="form-label">Duration</label>
-                    <select class="form-select" required>
-                        <option value="half">Half Day (4 hours)</option>
-                        <option value="full">Full Day (8 hours)</option>
+                    <select class="form-select" name="duration" required>
+                        <option value="half">Half Day (4 hours) - $25/space</option>
+                        <option value="full">Full Day (8 hours) - $40/space</option>
                     </select>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Date</label>
                     <input type="date" class="form-control" required>
                 </div>
-                <button type="submit" class="btn btn-primary">Confirm Booking</button>
+                <button type="submit" class="btn btn-primary">Proceed to Payment</button>
             </form>
         </div>
-    </main>
 
+        <div class="card mt-4">
+            <div class="card-header">
+                <h3>Upcoming Parking Events</h3>
+            </div>
+            <div class="card-body">
+                <div class="row" id="eventList">
+                    <!-- Events will be populated here -->
+                </div>
+            </div>
+        </div>
+    </main>
 
     <footer class="text-bg-dark p-3 text-center fixed-bottom">
         <div id="time"></div>
