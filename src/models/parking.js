@@ -1,3 +1,8 @@
+//Created by
+//Ho Cheuk Wing 21106121d
+//Wong Hiu Yau 21092461d
+
+
 import { client } from '../dbclient.js';
 import { ObjectId } from 'mongodb';
 import { updateEventSpots } from './event.js';

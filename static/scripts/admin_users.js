@@ -1,3 +1,8 @@
+//Created by
+//Ho Cheuk Wing 21106121d
+//Wong Hiu Yau 21092461d
+
+
 $(document).ready(function () {
   let userTable;
 
@@ -111,7 +116,7 @@ $(document).ready(function () {
 
             const data = await response.json();
             if (data.success) {
-              alert(`User ${action}d successfully`);
+              alert(`User ${action} successfully`);
               userTable.ajax.reload();
             } else {
               throw new Error(data.message);

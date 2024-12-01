@@ -1,3 +1,8 @@
+//Created by
+//Ho Cheuk Wing 21106121d
+//Wong Hiu Yau 21092461d
+
+
 import { createUser, findUserByUsername, updateUserProfile, updateUserPassword, validatePassword } from './models/user.js';
 import { comparePassword, hashPassword } from './utils/password.js';
 import { client, connectDB } from './dbclient.js';

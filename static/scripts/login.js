@@ -1,3 +1,8 @@
+//Created by
+//Ho Cheuk Wing 21106121d
+//Wong Hiu Yau 21092461d
+
+
 $(document).ready(function () {
   // Check for remembered username when page loads
   const rememberedUsername = getCookie('remembered_username');

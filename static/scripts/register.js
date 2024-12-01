@@ -1,3 +1,8 @@
+//Created by
+//Ho Cheuk Wing 21106121d
+//Wong Hiu Yau 21092461d
+
+
 $(document).ready(function () {
   const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

@@ -1,3 +1,8 @@
+//Created by
+//Ho Cheuk Wing 21106121d
+//Wong Hiu Yau 21092461d
+
+
 import session from 'express-session';
 
 export const checkAuth = (req, res, next) => {

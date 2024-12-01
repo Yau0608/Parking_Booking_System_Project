@@ -1,3 +1,8 @@
+//Created by
+//Ho Cheuk Wing 21106121d
+//Wong Hiu Yau 21092461d
+
+
 import { client } from '../dbclient.js';
 import { hashPassword, comparePassword } from '../utils/password.js';
 const db = client.db("parkingSystem");
