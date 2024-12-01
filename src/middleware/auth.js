@@ -25,13 +25,10 @@ export const checkAdmin = (req, res, next) => {
       logged: req.session.logged,
       role: req.session.role
     });
-    if (req.path.startsWith('/api/')) {
-      return res.status(401).json({
-        success: false,
-        message: 'Admin authentication required'
-      });
-    }
-    return res.redirect('/admin_login.html');
+    return res.status(401).json({
+      success: false,
+      message: 'Admin authentication required'
+    });
   }
   next();
 };

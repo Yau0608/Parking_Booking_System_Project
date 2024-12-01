@@ -4,20 +4,6 @@
 
 
 $(document).ready(function () {
-  // Check authentication status
-  fetch('/api/check-session')
-    .then(response => response.json())
-    .then(data => {
-      if (!data.success) {
-        window.location.href = '/login.html';
-        return;
-      }
-    })
-    .catch(error => {
-      console.error('Session check failed:', error);
-      window.location.href = '/login.html';
-    });
-
   let selectedSpaces = new Set();
   const pricePerSpace = {
     'half': 25,
@@ -103,9 +89,9 @@ $(document).ready(function () {
 
     selectedSpaces.forEach(space => {
       const tag = $(`<div class="selected-space-tag">
-                            Space ${space}
-                            <span class="remove-space" data-space="${space}">×</span>
-                          </div>`);
+                      Space ${space}
+                      <span class="remove-space" data-space="${space}">×</span>
+                    </div>`);
       spacesList.append(tag);
     });
 
