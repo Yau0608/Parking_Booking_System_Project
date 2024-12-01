@@ -2,4 +2,4 @@
 //Ho Cheuk Wing 21106121d
 //Wong Hiu Yau 21092461d
 
-npm install multer sharp 
+npm install sharp bycrypt 
