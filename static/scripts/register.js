@@ -47,44 +47,62 @@ $(document).ready(function () {
     }
   });
 
+  // Add this after your document.ready function
+  function readURL(input) {
+    if (input.files && input.files[0]) {
+      const reader = new FileReader();
+
+      reader.onload = function (e) {
+        $('#profilePreview').attr('src', e.target.result);
+      }
+
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
+
+  $('#profileImage').change(function () {
+    const file = this.files[0];
+    if (file) {
+      // Check file size
+      if (file.size > 5 * 1024 * 1024) {
+        alert('File size must be less than 5MB');
+        this.value = '';
+        return;
+      }
+
+      // Check file type
+      if (!file.type.match(/image.*/)) {
+        alert('Only image files are allowed');
+        this.value = '';
+        return;
+      }
+
+      readURL(this);
+    }
+  });
+
+  // Modify your form submission to include the image
   $('#registerForm').on('submit', async function (e) {
     e.preventDefault();
 
-    const password = $('#password').val();
-    const confirmPassword = $('#confirmPassword').val();
+    const formData = new FormData();
+    formData.append('username', $('#username').val().trim());
+    formData.append('password', $('#password').val());
+    formData.append('nickname', $('#nickname').val().trim());
+    formData.append('email', $('#email').val().trim());
+    formData.append('gender', $('#gender').val());
+    formData.append('birthdate', $('#birthdate').val());
 
-    // Check if passwords match
-    if (password !== confirmPassword) {
-      alert('Passwords do not match');
-      return;
-    }
-
-    const formData = {
-      username: $('#username').val().trim(),
-      password: password,
-      nickname: $('#nickname').val().trim(),
-      email: $('#email').val().trim(),
-      gender: $('#gender').val(),
-      birthdate: $('#birthdate').val()
-    };
-
-    // Client-side validation (keep existing validation)
-    if (!usernameRegex.test(formData.username)) {
-      alert('Invalid username format');
-      return;
-    }
-    if (!passwordRegex.test(formData.password)) {
-      alert('Invalid password format');
-      return;
+    // Append the profile image if one was selected
+    const profileImage = $('#profileImage')[0].files[0];
+    if (profileImage) {
+      formData.append('profileImage', profileImage);
     }
 
     try {
       const response = await fetch('/api/register', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData)
+        body: formData // Note: Don't set Content-Type header when sending FormData
       });
 
       const data = await response.json();
